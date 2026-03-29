@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rólunk — SmileStone</title>
+  <meta name="description" content="A SmileStone-t fogtechnikusok és laborvezetők visszajelzéseire építettük. Magyar fejlesztés, valódi labor tapasztalat, emberi support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════════════════════════ -->
+<header class="nav-sticky">
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="img/logo-text.webp" alt="SmileStone" class="h-9 w-auto">
+    </a>
+    <div class="hidden md:flex items-center gap-7">
+      <a href="features.html" class="nav-link">Funkciók</a>
+      <a href="index.html#pricing-teaser" class="nav-link">Árazás</a>
+      <a href="about.html" class="nav-link">Rólunk</a>
+      <a href="contact.html" class="nav-link">Kapcsolat</a>
+      <a href="dentist.html" class="nav-link font-bold flex items-center gap-1.5" style="color:#15803d;">Fogorvosoknak <span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;background:#dcfce7;color:#15803d;border-radius:9999px;padding:1px 6px;border:1px solid #bbf7d0;">Ingyenes</span></a>
+    </div>
+    <div class="hidden md:flex items-center gap-3">
+      <a href="#trial" class="btn-ghost text-sm">Bejelentkezés</a>
+      <a href="#trial" class="btn-primary text-sm">Próbáld ki ingyen</a>
+    </div>
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:text-blue-500 focus:outline-none" aria-label="Menü megnyitása" aria-expanded="false">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="mobile-menu md:hidden px-4 pb-4 border-t border-gray-100">
+    <a href="features.html" class="nav-link block py-2">Funkciók</a>
+    <a href="index.html#pricing-teaser" class="nav-link block py-2">Árazás</a>
+    <a href="about.html" class="nav-link block py-2">Rólunk</a>
+    <a href="contact.html" class="nav-link block py-2">Kapcsolat</a>
+    <a href="dentist.html" class="block py-2 font-bold" style="color:#15803d;">Fogorvosoknak <span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;background:#dcfce7;color:#15803d;border-radius:9999px;padding:1px 6px;border:1px solid #bbf7d0;">Ingyenes</span></a>
+    <div class="flex flex-col gap-2 mt-3">
+      <a href="#trial" class="btn-ghost text-center text-sm">Bejelentkezés</a>
+      <a href="#trial" class="btn-primary text-center text-sm">Próbáld ki ingyen</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     ABOUT HERO
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="hero-gradient pt-16 pb-16 md:pt-24 md:pb-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+    <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 text-sm font-medium mb-6 shadow-sm" style="color:#0078A8;">
+      <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
+      Rólunk
+    </div>
+    <h1 class="section-title text-4xl md:text-5xl leading-tight mb-5 max-w-3xl mx-auto">
+      Egy dental labor számára tervezett szoftver
+    </h1>
+    <p class="text-xl max-w-2xl mx-auto" style="color:#4A5568;">
+      A SmileStone-t fogtechnikusok és laborvezetők visszajelzéseire építettük — nem egy általános szoftvercégnél kitalálva, hanem a laborból kiindulva.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     STORY
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-28" style="background:#fff;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-2 gap-14 items-center">
+      <!-- Text -->
+      <div>
+        <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold mb-5" style="background:#EAF7FD; color:#0078A8;">
+          A történetünk
+        </div>
+        <h2 class="section-title text-3xl md:text-4xl mb-6">2018 óta a fogtechnikai laborokért</h2>
+        <p class="text-lg leading-relaxed mb-5" style="color:#4A5568;">
+          2018 óta dolgozunk azon, hogy a fogtechnikai laborok digitálisan is olyan precízen működjenek, mint fizikailag. Mert a legjobb fogtechnikus sem tud a legjobb munkát végezni ha papíron és Excelen kezeli az eseteket.
+        </p>
+        <p class="text-lg leading-relaxed" style="color:#4A5568;">
+          Minden funkciót valós laborok visszajelzései alapján fejlesztettünk. Nem szoftverből indultunk ki — a laborból indultunk ki, és szoftvert írtunk köré.
+        </p>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-6 mt-10">
+          <div class="text-center">
+            <p class="text-3xl font-extrabold" style="color:#00BAEF;">2018</p>
+            <p class="text-sm mt-1" style="color:#64748b;">alapítás éve</p>
+          </div>
+          <div class="text-center">
+            <p class="text-3xl font-extrabold" style="color:#00BAEF;">MDR</p>
+            <p class="text-sm mt-1" style="color:#64748b;">megfelelő</p>
+          </div>
+          <div class="text-center">
+            <p class="text-3xl font-extrabold" style="color:#00BAEF;">5+</p>
+            <p class="text-sm mt-1" style="color:#64748b;">év tapasztalat</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual placeholder -->
+      <div>
+        <div class="rounded-2xl overflow-hidden" style="background:linear-gradient(135deg, #EAF7FD 0%, #d0eefa 100%); min-height:360px; display:flex; align-items:center; justify-content:center; padding:3rem;">
+          <div class="text-center">
+            <!-- Abstract illustration placeholder -->
+            <div class="relative mx-auto" style="width:200px; height:200px;">
+              <!-- Concentric circles -->
+              <div class="absolute inset-0 rounded-full" style="background:rgba(0,186,239,0.08); border:2px solid rgba(0,186,239,0.15);"></div>
+              <div class="absolute rounded-full" style="inset:20px; background:rgba(0,186,239,0.12); border:2px solid rgba(0,186,239,0.2);"></div>
+              <div class="absolute rounded-full" style="inset:40px; background:rgba(0,186,239,0.18); border:2px solid rgba(0,186,239,0.3);"></div>
+              <!-- Center icon -->
+              <div class="absolute rounded-full flex items-center justify-center" style="inset:60px; background:#00BAEF;">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+              </div>
+            </div>
+            <p class="mt-6 font-semibold" style="color:#0078A8;">A laborból kiindulva</p>
+            <p class="text-sm mt-1" style="color:#64748b;">Valódi tapasztalat, valódi megoldás</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     VALUES / WHY US
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-28" style="background:#EAF7FD;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Miért a SmileStone?</h2>
+      <p class="text-lg max-w-xl mx-auto" style="color:#4A5568;">Három dolog, amiben mások vagyunk.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="value-card">
+        <div class="text-4xl mb-4">🇭🇺</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Magyar fejlesztés</h3>
+        <p style="color:#4A5568; line-height:1.65;">Ismerjük a hazai MDR és OGYÉI előírásokat. Nem kell fordítani — sem a szoftvert, sem a dokumentumokat, sem a supportot.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="text-4xl mb-4">🛠️</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Laborra tervezve</h3>
+        <p style="color:#4A5568; line-height:1.65;">Minden funkció valós laboros visszajelzés alapján épült. Nem általános projekt menedzsment — fogtechnikai laborra szabott.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="text-4xl mb-4">💬</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Emberi support</h3>
+        <p style="color:#4A5568; line-height:1.65;">Ha valami nem stimmel, felhívsz és emberrel beszélsz. Nem bot. Nem ticket rendszer. Átlag válaszidő: 4 óra munkanapokon.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BOTTOM CTA
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="trial" class="cta-banner py-20 md:py-24">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 leading-tight">
+      Csatlakozz a magyar fogtechnikai laborok közé
+    </h2>
+    <p class="text-lg text-white mb-8 opacity-90">
+      30 napos ingyenes próba. Kártyaszám nem kell. Bármikor lemondható.
+    </p>
+    <a href="#trial" class="btn-white text-base px-8 py-3.5">Próbáld ki ingyen →</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════════════ -->
+<footer class="py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-3 gap-10 mb-10">
+      <div>
+        <a href="index.html" class="flex items-center gap-2 mb-3">
+          <img src="img/logo-text.webp" alt="SmileStone" class="h-8 w-auto" style="filter: brightness(0) invert(1); opacity:0.85;">
+        </a>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">A fogtechnikai labor szoftver,<br>ami időt ad vissza.</p>
+        <div class="flex items-center gap-3 mt-4">
+          <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31.2 31.2 0 000 12a31.2 31.2 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31.2 31.2 0 0024 12a31.2 31.2 0 00-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.5h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Navigáció</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="features.html">Funkciók</a></li>
+          <li><a href="index.html#pricing-teaser">Árazás</a></li>
+          <li><a href="about.html">Rólunk</a></li>
+          <li><a href="contact.html">Kapcsolat</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Kezdj el ingyen</h4>
+        <p class="text-sm mb-4" style="color:#64748b;">30 napos próba, kártyaszám nélkül.</p>
+        <a href="#trial" class="btn-primary text-sm">Próbáld ki ingyen</a>
+      </div>
+    </div>
+    <div class="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style="border-color:rgba(255,255,255,0.08); color:#64748b;">
+      <p>© 2026 SmileStone. Minden jog fenntartva.</p>
+      <div class="flex gap-4">
+        <a href="#">Adatvédelem</a>
+        <a href="#">ÁSZF</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

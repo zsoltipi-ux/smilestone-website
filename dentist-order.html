@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileStone – Fogorvosi megrendelő</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #f8fafc; }
+
+    /* ── Tooth diagram ── */
+    .tooth {
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tooth rect, .tooth path, .tooth ellipse {
+      fill: #fff;
+      stroke: #94a3b8;
+      stroke-width: 1.5;
+      transition: all 0.15s ease;
+    }
+    .tooth:hover rect, .tooth:hover path, .tooth:hover ellipse {
+      fill: #e0f2fe;
+      stroke: #0ea5e9;
+    }
+    .tooth.selected rect, .tooth.selected path, .tooth.selected ellipse {
+      fill: #0ea5e9;
+      stroke: #0284c7;
+    }
+    .tooth text {
+      font-size: 7px;
+      fill: #64748b;
+      font-family: 'Inter', sans-serif;
+      pointer-events: none;
+      font-weight: 600;
+    }
+    .tooth.selected text { fill: #fff; }
+
+    /* ── Form cards ── */
+    .form-card {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-card h2 .section-num {
+      width: 26px; height: 26px;
+      background: #0ea5e9;
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Inputs ── */
+    .field-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.375rem;
+    }
+    .field-label .req { color: #ef4444; margin-left: 2px; }
+    .form-input {
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.9rem;
+      color: #0f172a;
+      background: #fff;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.12); }
+    .form-input::placeholder { color: #94a3b8; }
+    select.form-input { cursor: pointer; }
+
+    /* ── Badge chips ── */
+    .tooth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 9999px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .tooth-badge button { color: #0369a1; line-height: 1; }
+
+    /* ── Status badges ── */
+    .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 600; }
+    .badge-new    { background:#f1f5f9; color:#64748b; }
+    .badge-accepted { background:#dbeafe; color:#1d4ed8; }
+    .badge-wip    { background:#fef9c3; color:#a16207; }
+    .badge-done   { background:#dcfce7; color:#15803d; }
+    .badge-bill   { background:#f3e8ff; color:#7e22ce; }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #f8fafc;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: #0ea5e9;
+      background: #f0f9ff;
+    }
+
+    /* ── Timeline ── */
+    .timeline-step { display: flex; align-items: flex-start; gap: 0.75rem; padding-bottom: 1.25rem; position: relative; }
+    .timeline-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 11px; top: 24px;
+      width: 2px; bottom: 0;
+      background: #e2e8f0;
+    }
+    .timeline-dot {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .timeline-dot.done { background: #0ea5e9; color: #fff; }
+    .timeline-dot.pending { background: #e2e8f0; color: #94a3b8; }
+
+    /* ── Appointment row ── */
+    .appt-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
+
+    /* ── Table ── */
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table th { text-align: left; font-size: 0.78rem; font-weight: 600; color: #64748b; padding: 0.75rem 1rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .orders-table td { padding: 0.875rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.875rem; color: #1e293b; }
+    .orders-table tr:hover td { background: #f8fafc; cursor: pointer; }
+
+    /* ── Nav ── */
+    .nav-link { font-size: 0.875rem; font-weight: 500; color: #475569; padding: 0.375rem 0.75rem; border-radius: 0.5rem; transition: all 0.15s; text-decoration: none; }
+    .nav-link:hover, .nav-link.active { color: #0ea5e9; background: #f0f9ff; }
+
+    /* ── Buttons ── */
+    .btn-primary { background: #0ea5e9; color: #fff; font-weight: 700; border-radius: 0.625rem; padding: 0.75rem 2rem; font-size: 1rem; border: none; cursor: pointer; transition: background 0.15s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary:hover { background: #0284c7; }
+    .btn-ghost { background: transparent; color: #64748b; font-weight: 500; border-radius: 0.625rem; padding: 0.75rem 1.5rem; font-size: 0.9rem; border: 1.5px solid #e2e8f0; cursor: pointer; transition: all 0.15s; }
+    .btn-ghost:hover { border-color: #94a3b8; color: #374151; }
+    .btn-sm { padding: 0.375rem 0.875rem; font-size: 0.8rem; border-radius: 0.5rem; }
+
+    /* ── Collapsible ── */
+    .collapsible-content { overflow: hidden; transition: max-height 0.3s ease; max-height: 0; }
+    .collapsible-content.open { max-height: 800px; }
+    .chevron-icon { transition: transform 0.25s; }
+    .chevron-icon.rotated { transform: rotate(180deg); }
+
+    /* ── Views ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Success ── */
+    .success-icon { width: 80px; height: 80px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+
+    /* ── File thumbnails ── */
+    .file-thumb { display: flex; align-items: center; gap: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.82rem; color: #374151; }
+    .file-thumb button { color: #94a3b8; margin-left: auto; }
+    .file-thumb button:hover { color: #ef4444; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════════════ -->
+<nav style="background:#fff; border-bottom:1px solid #e2e8f0; position:sticky; top:0; z-index:50;">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <!-- Logo -->
+    <a href="dentist.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="img/SmileStone_logo_with_text_color.webp" alt="SmileStone" style="height:28px;">
+    </a>
+    <!-- Nav links -->
+    <div class="hidden sm:flex items-center gap-1">
+      <a href="#" class="nav-link active" onclick="showView('orders'); return false;">Megrendeléseim</a>
+      <a href="#" class="nav-link" onclick="showView('new-order'); return false;">Új megrendelés</a>
+      <a href="#" class="nav-link">Profil</a>
+      <a href="dentist.html" class="nav-link">Kijelentkezés</a>
+    </div>
+    <!-- Right: bell + avatar -->
+    <div class="flex items-center gap-3">
+      <button class="relative p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+      </button>
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:#0ea5e9;">AP</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VIEW: ORDERS LIST
+═══════════════════════════════════════════════════════════ -->
+<div id="view-orders" class="view active">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Page header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-extrabold text-slate-900">Megrendeléseim</h1>
+        <p class="text-sm text-slate-500 mt-0.5">Az összes beküldött munkád egy helyen</p>
+      </div>
+      <button class="btn-primary btn-sm" onclick="showView('new-order')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Új megrendelés
+      </button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="form-card" style="padding:1rem 1.25rem; margin-bottom:1rem;">
+      <div class="flex flex-wrap gap-3 items-center">
+        <select class="form-input" style="width:auto; min-width:160px;">
+          <option>Minden státusz</option>
+          <option>Új</option>
+          <option>Elfogadva</option>
+          <option>Folyamatban</option>
+          <option>Kész</option>
+          <option>Számlázható</option>
+        </select>
+        <input type="date" class="form-input" style="width:auto;" placeholder="Dátumtól">
+        <input type="date" class="form-input" style="width:auto;" placeholder="Dátumig">
+        <button class="btn-ghost btn-sm">Szűrés</button>
+      </div>
+    </div>
+
+    <!-- Orders table -->
+    <div class="form-card" style="padding:0; overflow:hidden;">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Azonosító</th>
+            <th>Páciens</th>
+            <th>Beküldve</th>
+            <th>Határidő</th>
+            <th>Státusz</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="showView('detail')">
+            <td class="font-mono font-semibold text-sky-600">#LAB-1042</td>
+            <td>Kovács Péter</td>
+            <td>2026-03-25</td>
+            <td>2026-04-02</td>
+            <td><span class="badge badge-wip">Folyamatban</span></td>
+          </tr>
+          <tr onclick="showView('detail')">
+            <td class="font-mono font-semibold text-sky-600">#LAB-1041</td>
+            <td>Szabó Anna</td>
+            <td>2026-03-22</td>
+            <td>2026-03-30</td>
+            <td><span class="badge badge-done">Kész</span></td>
+          </tr>
+          <tr onclick="showView('detail')">
+            <td class="font-mono font-semibold text-sky-600">#LAB-1040</td>
+            <td>Nagy János</td>
+            <td>2026-03-18</td>
+            <td>2026-03-28</td>
+            <td><span class="badge badge-bill">Számlázható</span></td>
+          </tr>
+          <tr onclick="showView('detail')">
+            <td class="font-mono font-semibold text-sky-600">#LAB-1039</td>
+            <td>Tóth Eszter</td>
+            <td>2026-03-15</td>
+            <td>2026-03-26</td>
+            <td><span class="badge badge-accepted">Elfogadva</span></td>
+          </tr>
+          <tr onclick="showView('detail')">
+            <td class="font-mono font-semibold text-sky-600">#LAB-1038</td>
+            <td>Fekete Gábor</td>
+            <td>2026-03-10</td>
+            <td>2026-03-20</td>
+            <td><span class="badge badge-new">Új</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VIEW: NEW ORDER FORM
+═══════════════════════════════════════════════════════════ -->
+<div id="view-new-order" class="view">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Page header -->
+    <div class="mb-6">
+      <button class="text-sm text-sky-600 font-medium flex items-center gap-1 mb-3 hover:underline" onclick="showView('orders')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Vissza a megrendelésekhez
+      </button>
+      <h1 class="text-2xl font-extrabold text-slate-900">Új megrendelés küldése a labornak</h1>
+      <p class="text-sm text-slate-500 mt-1">Töltsd ki az alábbi űrlapot. A labor azonnal értesítést kap.</p>
+    </div>
+
+    <!-- ── Section 1: Alapadatok ── -->
+    <div class="form-card">
+      <h2><span class="section-num">1</span> Alapadatok</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="sm:col-span-2">
+          <label class="field-label">Páciens neve <span class="req">*</span></label>
+          <input type="text" class="form-input" placeholder="pl. Kovács Péter">
+        </div>
+        <div>
+          <label class="field-label">Nem <span class="req">*</span></label>
+          <select class="form-input">
+            <option value="">Válassz...</option>
+            <option>Férfi</option>
+            <option>Nő</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Kor <span class="req">*</span></label>
+          <input type="number" class="form-input" placeholder="pl. 42" min="1" max="120">
+        </div>
+        <div>
+          <label class="field-label">Fogszín <span class="req">*</span></label>
+          <select class="form-input">
+            <option value="">Válassz...</option>
+            <optgroup label="A sorozat">
+              <option>A1</option><option>A2</option><option>A3</option><option>A3.5</option><option>A4</option>
+            </optgroup>
+            <optgroup label="B sorozat">
+              <option>B1</option><option>B2</option><option>B3</option><option>B4</option>
+            </optgroup>
+            <optgroup label="C sorozat">
+              <option>C1</option><option>C2</option><option>C3</option><option>C4</option>
+            </optgroup>
+            <optgroup label="D sorozat">
+              <option>D2</option><option>D3</option><option>D4</option>
+            </optgroup>
+            <option value="egyeb">Egyéb / szabad szöveg</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Határidő (készre kérés) <span class="req">*</span></label>
+          <input type="date" class="form-input">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section 2: Fogsor diagram ── -->
+    <div class="form-card">
+      <h2><span class="section-num">2</span> Érintett fogak kijelölése</h2>
+      <p class="text-xs text-slate-500 mb-4">Kattints az érintett fogakra (FDI jelölés)</p>
+
+      <!-- SVG tooth diagram -->
+      <div style="overflow-x:auto;">
+        <svg id="tooth-diagram" viewBox="0 0 480 200" style="width:100%; max-width:480px; display:block; margin:0 auto;">
+
+          <!-- Upper jaw label -->
+          <text x="240" y="12" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">FELSŐ ÁLLKAPOCS</text>
+
+          <!-- Upper right (18–11) -->
+          <g class="tooth" data-tooth="18" onclick="toggleTooth(this)"><rect x="10"  y="18" width="22" height="28" rx="5"/><text x="21"  y="36">18</text></g>
+          <g class="tooth" data-tooth="17" onclick="toggleTooth(this)"><rect x="36"  y="18" width="22" height="28" rx="5"/><text x="47"  y="36">17</text></g>
+          <g class="tooth" data-tooth="16" onclick="toggleTooth(this)"><rect x="62"  y="18" width="22" height="28" rx="5"/><text x="73"  y="36">16</text></g>
+          <g class="tooth" data-tooth="15" onclick="toggleTooth(this)"><rect x="88"  y="20" width="20" height="26" rx="5"/><text x="98"  y="37">15</text></g>
+          <g class="tooth" data-tooth="14" onclick="toggleTooth(this)"><rect x="112" y="20" width="20" height="26" rx="5"/><text x="122" y="37">14</text></g>
+          <g class="tooth" data-tooth="13" onclick="toggleTooth(this)"><rect x="136" y="22" width="18" height="24" rx="5"/><text x="145" y="38">13</text></g>
+          <g class="tooth" data-tooth="12" onclick="toggleTooth(this)"><rect x="158" y="24" width="16" height="22" rx="5"/><text x="166" y="39">12</text></g>
+          <g class="tooth" data-tooth="11" onclick="toggleTooth(this)"><rect x="178" y="24" width="18" height="22" rx="5"/><text x="187" y="39">11</text></g>
+
+          <!-- Midline -->
+          <line x1="240" y1="14" x2="240" y2="96" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+          <!-- Upper left (21–28) -->
+          <g class="tooth" data-tooth="21" onclick="toggleTooth(this)"><rect x="200" y="24" width="18" height="22" rx="5"/><text x="209" y="39">21</text></g>
+          <g class="tooth" data-tooth="22" onclick="toggleTooth(this)"><rect x="222" y="24" width="16" height="22" rx="5"/><text x="230" y="39">22</text></g>
+          <g class="tooth" data-tooth="23" onclick="toggleTooth(this)"><rect x="242" y="22" width="18" height="24" rx="5"/><text x="251" y="38">23</text></g>
+          <g class="tooth" data-tooth="24" onclick="toggleTooth(this)"><rect x="264" y="20" width="20" height="26" rx="5"/><text x="274" y="37">24</text></g>
+          <g class="tooth" data-tooth="25" onclick="toggleTooth(this)"><rect x="288" y="20" width="20" height="26" rx="5"/><text x="298" y="37">25</text></g>
+          <g class="tooth" data-tooth="26" onclick="toggleTooth(this)"><rect x="312" y="18" width="22" height="28" rx="5"/><text x="323" y="36">26</text></g>
+          <g class="tooth" data-tooth="27" onclick="toggleTooth(this)"><rect x="338" y="18" width="22" height="28" rx="5"/><text x="349" y="36">27</text></g>
+          <g class="tooth" data-tooth="28" onclick="toggleTooth(this)"><rect x="364" y="18" width="22" height="28" rx="5"/><text x="375" y="36">28</text></g>
+
+          <!-- Gap between jaws -->
+          <text x="240" y="106" text-anchor="middle" font-size="9" fill="#cbd5e1" font-family="Inter,sans-serif">· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·</text>
+
+          <!-- Lower jaw label -->
+          <text x="240" y="192" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">ALSÓ ÁLLKAPOCS</text>
+
+          <!-- Lower right (48–41) -->
+          <g class="tooth" data-tooth="48" onclick="toggleTooth(this)"><rect x="10"  y="116" width="22" height="28" rx="5"/><text x="21"  y="134">48</text></g>
+          <g class="tooth" data-tooth="47" onclick="toggleTooth(this)"><rect x="36"  y="116" width="22" height="28" rx="5"/><text x="47"  y="134">47</text></g>
+          <g class="tooth" data-tooth="46" onclick="toggleTooth(this)"><rect x="62"  y="116" width="22" height="28" rx="5"/><text x="73"  y="134">46</text></g>
+          <g class="tooth" data-tooth="45" onclick="toggleTooth(this)"><rect x="88"  y="118" width="20" height="26" rx="5"/><text x="98"  y="135">45</text></g>
+          <g class="tooth" data-tooth="44" onclick="toggleTooth(this)"><rect x="112" y="118" width="20" height="26" rx="5"/><text x="122" y="135">44</text></g>
+          <g class="tooth" data-tooth="43" onclick="toggleTooth(this)"><rect x="136" y="120" width="18" height="24" rx="5"/><text x="145" y="136">43</text></g>
+          <g class="tooth" data-tooth="42" onclick="toggleTooth(this)"><rect x="158" y="122" width="16" height="22" rx="5"/><text x="166" y="137">42</text></g>
+          <g class="tooth" data-tooth="41" onclick="toggleTooth(this)"><rect x="178" y="122" width="18" height="22" rx="5"/><text x="187" y="137">41</text></g>
+
+          <!-- Lower left (31–38) -->
+          <g class="tooth" data-tooth="31" onclick="toggleTooth(this)"><rect x="200" y="122" width="18" height="22" rx="5"/><text x="209" y="137">31</text></g>
+          <g class="tooth" data-tooth="32" onclick="toggleTooth(this)"><rect x="222" y="122" width="16" height="22" rx="5"/><text x="230" y="137">32</text></g>
+          <g class="tooth" data-tooth="33" onclick="toggleTooth(this)"><rect x="242" y="120" width="18" height="24" rx="5"/><text x="251" y="136">33</text></g>
+          <g class="tooth" data-tooth="34" onclick="toggleTooth(this)"><rect x="264" y="118" width="20" height="26" rx="5"/><text x="274" y="135">34</text></g>
+          <g class="tooth" data-tooth="35" onclick="toggleTooth(this)"><rect x="288" y="118" width="20" height="26" rx="5"/><text x="298" y="135">35</text></g>
+          <g class="tooth" data-tooth="36" onclick="toggleTooth(this)"><rect x="312" y="116" width="22" height="28" rx="5"/><text x="323" y="134">36</text></g>
+          <g class="tooth" data-tooth="37" onclick="toggleTooth(this)"><rect x="338" y="116" width="22" height="28" rx="5"/><text x="349" y="134">37</text></g>
+          <g class="tooth" data-tooth="38" onclick="toggleTooth(this)"><rect x="364" y="116" width="22" height="28" rx="5"/><text x="375" y="134">38</text></g>
+
+        </svg>
+      </div>
+
+      <!-- Selected teeth chips -->
+      <div id="selected-teeth-display" class="mt-4 min-h-[36px]">
+        <p id="no-teeth-msg" class="text-sm text-slate-400 italic">Még nem jelöltél ki fogat.</p>
+        <div id="teeth-chips" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Work type per selection -->
+      <div id="work-type-section" class="mt-4 hidden">
+        <label class="field-label">Munka típusa a kijelölt fogakhoz</label>
+        <select class="form-input" style="max-width:280px;" id="work-type-select">
+          <option value="">Válassz típust...</option>
+          <option>Korona</option>
+          <option>Híd</option>
+          <option>Héj (veneer)</option>
+          <option>Inlay / Onlay</option>
+          <option>Implantátum felépítmény</option>
+          <option>Kivehető pótlás</option>
+          <option>Fogsor</option>
+          <option>Egyéb</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ── Section 3: Munka leírása ── -->
+    <div class="form-card">
+      <h2><span class="section-num">3</span> Munka leírása</h2>
+      <div class="mb-4">
+        <label class="field-label">Leírás / különleges kérések</label>
+        <textarea class="form-input" rows="4" placeholder="Pl. A2 fogszín, fényes felület, fém keretes koronák, stb."></textarea>
+      </div>
+      <!-- Work type tags summary -->
+      <div id="work-tags-summary" class="flex flex-wrap gap-2">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ── Section 4: Időpontok (collapsible) ── -->
+    <div class="form-card">
+      <button type="button" class="w-full flex items-center justify-between" onclick="toggleCollapsible('appt-section', 'appt-chevron')">
+        <h2 style="margin-bottom:0;"><span class="section-num" style="background:#94a3b8;">4</span> Próba időpontok <span class="text-xs font-normal text-slate-400 ml-1">(opcionális)</span></h2>
+        <svg id="appt-chevron" class="chevron-icon w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div id="appt-section" class="collapsible-content">
+        <div style="padding-top:1.25rem;">
+          <div id="appt-rows"></div>
+          <button type="button" class="btn-ghost btn-sm mt-2" onclick="addAppointmentRow()">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            Időpont hozzáadása
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section 5: Megjegyzés ── -->
+    <div class="form-card">
+      <h2><span class="section-num">5</span> Megjegyzés a labornak</h2>
+      <textarea class="form-input" rows="3" placeholder="Bármilyen extra info a labornak..."></textarea>
+    </div>
+
+    <!-- ── Section 6: Fájlok ── -->
+    <div class="form-card">
+      <h2><span class="section-num">6</span> Képek / dokumentumok</h2>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="handleDragLeave(event)">
+        <svg class="w-10 h-10 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        <p class="text-sm font-medium text-slate-500">Húzd ide a fájlokat, vagy <span class="text-sky-600 underline cursor-pointer">kattints a kiválasztáshoz</span></p>
+        <p class="text-xs text-slate-400 mt-1">Képek (JPG, PNG) és PDF · Max. 10 MB fájlonként</p>
+        <input type="file" id="file-input" multiple accept="image/*,.pdf" class="hidden" onchange="handleFileSelect(event)">
+      </div>
+      <div id="file-list" class="mt-3 flex flex-col gap-2"></div>
+    </div>
+
+    <!-- ── Submit ── -->
+    <div class="text-center py-4">
+      <button class="btn-primary" onclick="submitOrder()">
+        Megrendelés elküldése
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+      <p class="text-xs text-slate-400 mt-3">A labor azonnal értesítést kap emailben és a rendszerben.</p>
+      <button class="text-sm text-slate-400 mt-2 hover:text-slate-600 underline" onclick="showView('orders')">Mégse</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VIEW: SUCCESS
+═══════════════════════════════════════════════════════════ -->
+<div id="view-success" class="view">
+  <div class="max-w-lg mx-auto px-4 sm:px-6 py-16 text-center">
+    <div class="success-icon">
+      <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-3">Megrendelés elküldve!</h1>
+    <p class="text-slate-500 mb-8 leading-relaxed">A laborod értesítést kapott. Emailben jelezni fogjuk, ha elfogadták vagy változás történt.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <button class="btn-primary" onclick="showView('new-order')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Új megrendelés indítása
+      </button>
+      <button class="btn-ghost" onclick="showView('orders')">Megrendeléseim megtekintése →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VIEW: ORDER DETAIL
+═══════════════════════════════════════════════════════════ -->
+<div id="view-detail" class="view">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Back -->
+    <button class="text-sm text-sky-600 font-medium flex items-center gap-1 mb-4 hover:underline" onclick="showView('orders')">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Vissza a megrendelésekhez
+    </button>
+
+    <!-- Header card -->
+    <div class="form-card mb-4">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Megrendelés azonosító</p>
+          <p class="text-2xl font-extrabold text-sky-600 font-mono">#LAB-1042</p>
+        </div>
+        <span class="badge badge-wip text-sm px-3 py-1">Folyamatban</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5" style="border-top:1px solid #f1f5f9;">
+        <div>
+          <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Páciens</p>
+          <p class="font-semibold text-slate-800 text-sm">Kovács Péter</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Fogszín</p>
+          <p class="font-semibold text-slate-800 text-sm">A2</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Határidő</p>
+          <p class="font-semibold text-slate-800 text-sm">2026-04-02</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Labor</p>
+          <p class="font-semibold text-slate-800 text-sm">Budapest Dental Lab</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tooth diagram (read-only) -->
+    <div class="form-card mb-4">
+      <h2 style="margin-bottom:1rem; font-size:0.9375rem;">Kijelölt fogak</h2>
+      <svg viewBox="0 0 480 200" style="width:100%; max-width:480px; display:block; margin:0 auto;">
+        <!-- Upper jaw label -->
+        <text x="240" y="12" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">FELSŐ ÁLLKAPOCS</text>
+        <!-- Upper right -->
+        <g><rect x="10"  y="18" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="21"  y="36" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">18</text></g>
+        <g><rect x="36"  y="18" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="47"  y="36" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">17</text></g>
+        <g><rect x="62"  y="18" width="22" height="28" rx="5" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5"/><text x="73"  y="36" font-size="7" fill="#fff" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">16</text></g>
+        <g><rect x="88"  y="20" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="98"  y="37" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">15</text></g>
+        <g><rect x="112" y="20" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="122" y="37" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">14</text></g>
+        <g><rect x="136" y="22" width="18" height="24" rx="5" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5"/><text x="145" y="38" font-size="7" fill="#fff" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">13</text></g>
+        <g><rect x="158" y="24" width="16" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="166" y="39" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">12</text></g>
+        <g><rect x="178" y="24" width="18" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="187" y="39" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">11</text></g>
+        <line x1="240" y1="14" x2="240" y2="96" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <!-- Upper left -->
+        <g><rect x="200" y="24" width="18" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="209" y="39" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">21</text></g>
+        <g><rect x="222" y="24" width="16" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="230" y="39" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">22</text></g>
+        <g><rect x="242" y="22" width="18" height="24" rx="5" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5"/><text x="251" y="38" font-size="7" fill="#fff" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">23</text></g>
+        <g><rect x="264" y="20" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="274" y="37" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">24</text></g>
+        <g><rect x="288" y="20" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="298" y="37" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">25</text></g>
+        <g><rect x="312" y="18" width="22" height="28" rx="5" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5"/><text x="323" y="36" font-size="7" fill="#fff" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">26</text></g>
+        <g><rect x="338" y="18" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="349" y="36" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">27</text></g>
+        <g><rect x="364" y="18" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="375" y="36" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">28</text></g>
+        <text x="240" y="106" text-anchor="middle" font-size="9" fill="#cbd5e1" font-family="Inter,sans-serif">· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·</text>
+        <text x="240" y="192" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">ALSÓ ÁLLKAPOCS</text>
+        <!-- Lower right -->
+        <g><rect x="10"  y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="21"  y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">48</text></g>
+        <g><rect x="36"  y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="47"  y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">47</text></g>
+        <g><rect x="62"  y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="73"  y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">46</text></g>
+        <g><rect x="88"  y="118" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="98"  y="135" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">45</text></g>
+        <g><rect x="112" y="118" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="122" y="135" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">44</text></g>
+        <g><rect x="136" y="120" width="18" height="24" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="145" y="136" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">43</text></g>
+        <g><rect x="158" y="122" width="16" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="166" y="137" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">42</text></g>
+        <g><rect x="178" y="122" width="18" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="187" y="137" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">41</text></g>
+        <!-- Lower left -->
+        <g><rect x="200" y="122" width="18" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="209" y="137" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">31</text></g>
+        <g><rect x="222" y="122" width="16" height="22" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="230" y="137" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">32</text></g>
+        <g><rect x="242" y="120" width="18" height="24" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="251" y="136" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">33</text></g>
+        <g><rect x="264" y="118" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="274" y="135" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">34</text></g>
+        <g><rect x="288" y="118" width="20" height="26" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="298" y="135" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">35</text></g>
+        <g><rect x="312" y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="323" y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">36</text></g>
+        <g><rect x="338" y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="349" y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">37</text></g>
+        <g><rect x="364" y="116" width="22" height="28" rx="5" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/><text x="375" y="134" font-size="7" fill="#94a3b8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">38</text></g>
+      </svg>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="tooth-badge">16</span>
+        <span class="tooth-badge">13</span>
+        <span class="tooth-badge">23</span>
+        <span class="tooth-badge">26</span>
+      </div>
+    </div>
+
+    <!-- Work items table -->
+    <div class="form-card mb-4">
+      <h2 style="margin-bottom:1rem; font-size:0.9375rem;">Munka tételek</h2>
+      <table style="width:100%; border-collapse:collapse; font-size:0.875rem;">
+        <thead>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <th style="text-align:left; padding:0.5rem 0.75rem; color:#64748b; font-size:0.78rem; font-weight:600;">Pótlás típusa</th>
+            <th style="text-align:left; padding:0.5rem 0.75rem; color:#64748b; font-size:0.78rem; font-weight:600;">Pótláshely (fog)</th>
+            <th style="text-align:left; padding:0.5rem 0.75rem; color:#64748b; font-size:0.78rem; font-weight:600;">Mennyiség</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f8fafc;">
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">Korona</td>
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">16, 26</td>
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">2</td>
+          </tr>
+          <tr>
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">Héj (veneer)</td>
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">13, 23</td>
+            <td style="padding:0.625rem 0.75rem; color:#1e293b;">2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Appointments -->
+    <div class="form-card mb-4">
+      <h2 style="margin-bottom:1rem; font-size:0.9375rem;">Próba időpontok</h2>
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 rounded-lg px-4 py-2.5">
+          <span class="font-semibold text-slate-700 w-28">Fogpróba</span>
+          <span>2026-03-28 · 10:00</span>
+          <span class="text-slate-400 text-xs">— Első próba</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 rounded-lg px-4 py-2.5">
+          <span class="font-semibold text-slate-700 w-28">Készrevitel</span>
+          <span>2026-04-02 · 14:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-card mb-4">
+      <h2 style="margin-bottom:0.75rem; font-size:0.9375rem;">Megjegyzések</h2>
+      <p class="text-sm text-slate-600 leading-relaxed">A2 fogszín, fényes felület. A 16-os koronánál kérjük a marginális illeszkedést különösen pontosra.</p>
+    </div>
+
+    <!-- Timeline -->
+    <div class="form-card">
+      <h2 style="margin-bottom:1.25rem; font-size:0.9375rem;">Státusz napló</h2>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div>
+          <p class="text-sm font-semibold text-slate-800">Beküldve</p>
+          <p class="text-xs text-slate-400 mt-0.5">2026-03-25 · 09:14</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div>
+          <p class="text-sm font-semibold text-slate-800">Elfogadva</p>
+          <p class="text-xs text-slate-400 mt-0.5">2026-03-25 · 11:02 · Budapest Dental Lab</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot done">✓</div>
+        <div>
+          <p class="text-sm font-semibold text-slate-800">Folyamatban</p>
+          <p class="text-xs text-slate-400 mt-0.5">2026-03-26 · 08:30</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot pending">○</div>
+        <div>
+          <p class="text-sm font-medium text-slate-400">Kész</p>
+          <p class="text-xs text-slate-300 mt-0.5">Várható: 2026-04-02</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+// ── View switching ──────────────────────────────────────────
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Tooth diagram ───────────────────────────────────────────
+const selectedTeeth = new Set();
+
+function toggleTooth(el) {
+  const num = el.dataset.tooth;
+  if (selectedTeeth.has(num)) {
+    selectedTeeth.delete(num);
+    el.classList.remove('selected');
+  } else {
+    selectedTeeth.add(num);
+    el.classList.add('selected');
+  }
+  renderTeethChips();
+}
+
+function renderTeethChips() {
+  const chips = document.getElementById('teeth-chips');
+  const msg   = document.getElementById('no-teeth-msg');
+  const wts   = document.getElementById('work-type-section');
+  chips.innerHTML = '';
+  if (selectedTeeth.size === 0) {
+    msg.style.display = '';
+    wts.classList.add('hidden');
+    return;
+  }
+  msg.style.display = 'none';
+  wts.classList.remove('hidden');
+  const sorted = Array.from(selectedTeeth).sort((a,b) => parseInt(a)-parseInt(b));
+  sorted.forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'tooth-badge';
+    chip.innerHTML = t + '<button onclick="removeTooth(\'' + t + '\')" title="Eltávolít">×</button>';
+    chips.appendChild(chip);
+  });
+  updateWorkTags();
+}
+
+function removeTooth(num) {
+  selectedTeeth.delete(num);
+  const el = document.querySelector('[data-tooth="' + num + '"]');
+  if (el) el.classList.remove('selected');
+  renderTeethChips();
+}
+
+function updateWorkTags() {
+  const wt = document.getElementById('work-type-select');
+  const summary = document.getElementById('work-tags-summary');
+  if (!wt || !wt.value) { summary.innerHTML = ''; return; }
+  const sorted = Array.from(selectedTeeth).sort((a,b) => parseInt(a)-parseInt(b));
+  if (sorted.length === 0) { summary.innerHTML = ''; return; }
+  summary.innerHTML = '<span class="tooth-badge" style="background:#f0fdf4;color:#15803d;">' + wt.value + ' — ' + sorted.join(', ') + '</span>';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const wt = document.getElementById('work-type-select');
+  if (wt) wt.addEventListener('change', updateWorkTags);
+});
+
+// ── Collapsible ─────────────────────────────────────────────
+function toggleCollapsible(contentId, chevronId) {
+  const content = document.getElementById(contentId);
+  const chevron = document.getElementById(chevronId);
+  content.classList.toggle('open');
+  chevron.classList.toggle('rotated');
+}
+
+// ── Appointment rows ─────────────────────────────────────────
+let apptCount = 0;
+function addAppointmentRow() {
+  apptCount++;
+  const id = 'appt-' + apptCount;
+  const container = document.getElementById('appt-rows');
+  const row = document.createElement('div');
+  row.className = 'appt-row';
+  row.id = id;
+  row.innerHTML = `
+    <select class="form-input" style="min-width:160px; flex:1;">
+      <option>Mattpróba</option>
+      <option>Harapási sablon</option>
+      <option>Vázpróba</option>
+      <option>Fogpróba</option>
+      <option>Készrevitel</option>
+    </select>
+    <input type="date" class="form-input" style="width:auto;">
+    <input type="time" class="form-input" style="width:auto; min-width:100px;">
+    <input type="text" class="form-input" placeholder="Megjegyzés (opcionális)" style="flex:2;">
+    <button onclick="document.getElementById('${id}').remove()" class="p-2 text-slate-400 hover:text-red-500 flex-shrink-0" title="Törlés">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+// ── File upload ──────────────────────────────────────────────
+const uploadedFiles = [];
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  document.getElementById('upload-zone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  addFiles(e.dataTransfer.files);
+}
+function handleFileSelect(e) {
+  addFiles(e.target.files);
+}
+function addFiles(files) {
+  Array.from(files).forEach(f => {
+    uploadedFiles.push(f);
+    renderFileThumb(f, uploadedFiles.length - 1);
+  });
+}
+function renderFileThumb(file, idx) {
+  const list = document.getElementById('file-list');
+  const el = document.createElement('div');
+  el.className = 'file-thumb';
+  el.id = 'file-' + idx;
+  const icon = file.type.startsWith('image') ? '🖼️' : '📄';
+  const size = (file.size / 1024).toFixed(0) + ' KB';
+  el.innerHTML = `<span>${icon}</span><span class="font-medium truncate" style="max-width:200px;">${file.name}</span><span class="text-slate-400 text-xs ml-1">${size}</span><button onclick="removeFile(${idx})" title="Eltávolít"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>`;
+  list.appendChild(el);
+}
+function removeFile(idx) {
+  const el = document.getElementById('file-' + idx);
+  if (el) el.remove();
+}
+
+// ── Submit ───────────────────────────────────────────────────
+function submitOrder() {
+  showView('success');
+}
+</script>
+
+</body>
+</html>

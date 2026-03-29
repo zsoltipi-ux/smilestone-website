@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileStone Fogorvosoknak — Küldj digitális munkalapot a labornak ingyen</title>
+  <meta name="description" content="Fogorvosoknak teljesen ingyenes. Küldj digitális munkalapot a labornak — fogsor diagram, határidő, visszajelzés. Semmi papír, semmi telefonálás.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Dentist page accent: green ── */
+    .btn-green {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 9999px;
+      padding: 0.75rem 1.75rem;
+      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(34,197,94,0.35);
+      text-decoration: none;
+    }
+    .btn-green:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(34,197,94,0.4);
+    }
+    .dentist-hero-gradient {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 60%, #f0fafe 100%);
+    }
+    .free-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, #dcfce7, #d1fae5);
+      color: #15803d;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 9999px;
+      padding: 0.45rem 1.1rem;
+      border: 1.5px solid #bbf7d0;
+    }
+    .feature-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: #22c55e;
+      box-shadow: 0 8px 24px rgba(34,197,94,0.1);
+      transform: translateY(-2px);
+    }
+    .step-number-green {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+    }
+    .dentist-faq-item { border-bottom: 1px solid #e2e8f0; }
+    .dentist-faq-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1.1rem 0;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #1A2B4A;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .dentist-faq-chevron {
+      flex-shrink: 0;
+      transition: transform 0.25s;
+      color: #22c55e;
+    }
+    .dentist-faq-btn[aria-expanded="true"] .dentist-faq-chevron {
+      transform: rotate(180deg);
+    }
+    .dentist-faq-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: #4A5568;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .dentist-faq-body.open {
+      max-height: 200px;
+      padding-bottom: 1rem;
+    }
+    .nav-dentist-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 700;
+      color: #15803d;
+      position: relative;
+    }
+    .nav-dentist-badge .badge-pill {
+      font-size: 0.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #dcfce7;
+      color: #15803d;
+      border-radius: 9999px;
+      padding: 1px 6px;
+      border: 1px solid #bbf7d0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════════════════════════ -->
+<header class="nav-sticky">
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="img/logo-text.webp" alt="SmileStone" class="h-9 w-auto">
+    </a>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex items-center gap-7">
+      <a href="features.html" class="nav-link">Funkciók</a>
+      <a href="index.html#pricing-teaser" class="nav-link">Árazás</a>
+      <a href="about.html" class="nav-link">Rólunk</a>
+      <a href="contact.html" class="nav-link">Kapcsolat</a>
+      <a href="dentist.html" class="nav-dentist-badge nav-link" style="color:#15803d;">
+        Fogorvosoknak <span class="badge-pill">Ingyenes</span>
+      </a>
+    </div>
+
+    <!-- Desktop CTA buttons -->
+    <div class="hidden md:flex items-center gap-3">
+      <a href="#trial" class="btn-ghost text-sm">Bejelentkezés</a>
+      <a href="#dentist-trial" class="btn-green text-sm">Regisztrálok ingyen</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:text-blue-500 focus:outline-none" aria-label="Menü megnyitása" aria-expanded="false">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="mobile-menu md:hidden px-4 pb-4 border-t border-gray-100">
+    <a href="features.html" class="nav-link block py-2">Funkciók</a>
+    <a href="index.html#pricing-teaser" class="nav-link block py-2">Árazás</a>
+    <a href="about.html" class="nav-link block py-2">Rólunk</a>
+    <a href="contact.html" class="nav-link block py-2">Kapcsolat</a>
+    <a href="dentist.html" class="block py-2 font-bold" style="color:#15803d;">Fogorvosoknak <span class="badge-pill" style="font-size:0.6rem;background:#dcfce7;color:#15803d;border-radius:9999px;padding:1px 6px;border:1px solid #bbf7d0;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Ingyenes</span></a>
+    <div class="flex flex-col gap-2 mt-3">
+      <a href="#trial" class="btn-ghost text-center text-sm">Bejelentkezés</a>
+      <a href="#dentist-trial" class="btn-green text-center text-sm">Regisztrálok ingyen</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="dentist-hero-gradient pt-16 pb-20 md:pt-24 md:pb-28">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+
+      <!-- Left: copy -->
+      <div class="animate-fade-up">
+        <div class="free-badge mb-6">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          Fogorvosoknak teljesen ingyenes — örökre
+        </div>
+        <h1 class="section-title text-4xl md:text-5xl leading-tight mb-5">
+          Küldj digitális munkalapot a labornak — ingyen
+        </h1>
+        <p class="text-lg mb-8 leading-relaxed" style="color:#4A5568; max-width:480px;">
+          Töltsd ki a megrendelést online, jelöld meg a fogakat a diagramon, és a labor azonnal megkapja. Semmi papír, semmi telefonálás.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+          <a href="#dentist-trial" class="btn-green text-base px-7 py-3">Regisztrálok ingyen →</a>
+          <a href="#how-it-works" class="btn-ghost text-base px-6 py-3">Nézd meg hogyan működik →</a>
+        </div>
+        <!-- Trust micro-copy -->
+        <p class="text-xs mt-5" style="color:#94a3b8;">Nincs kártyaszám · Nincs kötelezettség · 2 perc a regisztráció</p>
+      </div>
+
+      <!-- Right: split-screen mockup -->
+      <div class="animate-fade-up" style="animation-delay:0.15s;">
+        <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-100">
+          <img src="img/screenshot-dentist-form.jpg" alt="Fogorvosi megrendelő form és labor nézet" class="w-full h-auto">
+        </div>
+        <!-- Caption -->
+        <p class="text-center text-xs mt-3" style="color:#94a3b8;">Bal: fogorvosi megrendelő · Jobb: labor fogadja az esetet</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="how-it-works" class="py-20 md:py-24" style="background:#fff;">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#dcfce7;color:#15803d;">Hogyan működik</span>
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Hogyan működik fogászati oldalról</h2>
+      <p class="text-lg max-w-xl mx-auto" style="color:#4A5568;">Három lépés, és a labor már dolgozik is az eseteden.</p>
+    </div>
+
+    <div class="space-y-8">
+
+      <!-- Step 1 -->
+      <div class="flex gap-6 items-start">
+        <div class="step-number-green">1</div>
+        <div class="flex-1 pt-1">
+          <h3 class="text-xl font-bold mb-2" style="color:#1A2B4A;">Regisztrálsz ingyen</h3>
+          <p style="color:#4A5568; line-height:1.7;">Létrehozol egy ingyenes fiókot. Email cím, semmi más. Nincs telepítés, nincs hosszú bevezetés — böngészőből azonnal elérhető.</p>
+        </div>
+        <div class="hidden md:block w-40 flex-shrink-0">
+          <img src="img/screenshot-register.jpg" alt="Regisztráció" class="rounded-xl shadow-md w-full h-auto">
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div class="flex gap-6 items-center">
+        <div class="w-12 flex justify-center"><div class="w-0.5 h-8" style="background:linear-gradient(to bottom,#22c55e,#00BAEF);"></div></div>
+        <div class="flex-1"></div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="flex gap-6 items-start">
+        <div class="step-number-green">2</div>
+        <div class="flex-1 pt-1">
+          <h3 class="text-xl font-bold mb-2" style="color:#1A2B4A;">Kitöltöd a megrendelést</h3>
+          <p style="color:#4A5568; line-height:1.7;">Fogsor diagram, munka típusa, határidő, megjegyzések. 2 perc. A diagramon egyszerűen rákattintasz az érintett fogakra — pontosabb, mint bármilyen papír.</p>
+        </div>
+        <div class="hidden md:block w-40 flex-shrink-0">
+          <img src="img/screenshot-order-form.jpg" alt="Megrendelő form" class="rounded-xl shadow-md w-full h-auto">
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div class="flex gap-6 items-center">
+        <div class="w-12 flex justify-center"><div class="w-0.5 h-8" style="background:linear-gradient(to bottom,#00BAEF,#0078A8);"></div></div>
+        <div class="flex-1"></div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="flex gap-6 items-start">
+        <div class="step-number-green">3</div>
+        <div class="flex-1 pt-1">
+          <h3 class="text-xl font-bold mb-2" style="color:#1A2B4A;">A labor megkapja</h3>
+          <p style="color:#4A5568; line-height:1.7;">Az általad megadott labor azonnal látja a megrendelést — és visszajelez, ha kész. Te emailben értesítést kapsz minden státuszváltásról.</p>
+        </div>
+        <div class="hidden md:block w-40 flex-shrink-0">
+          <img src="img/screenshot-status.jpg" alt="Státusz követés" class="rounded-xl shadow-md w-full h-auto">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     WHAT THE DENTIST GETS
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-24" style="background:#f8fafc;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#dcfce7;color:#15803d;">Mit kapsz</span>
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Minden, amire szükséged van</h2>
+      <p class="text-lg max-w-xl mx-auto" style="color:#4A5568;">Fogorvosoknak ez a modul örökre ingyenes. Nincs rejtett díj.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <div class="feature-card">
+        <div class="text-3xl mb-3">🦷</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Digitális fogsor diagram</h3>
+        <p class="text-sm leading-relaxed" style="color:#4A5568;">Kattints a fogra, jelöld a munkát. Pontosabb mint a papír — és a labor azonnal érti.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="text-3xl mb-3">📋</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Automatikus munkalap</h3>
+        <p class="text-sm leading-relaxed" style="color:#4A5568;">A kitöltött form azonnal munkalappá válik. Nyomtatható, küldhető, archiválható.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="text-3xl mb-3">📬</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Közvetlen labor kapcsolat</h3>
+        <p class="text-sm leading-relaxed" style="color:#4A5568;">Látod mikor fogadta el a labor és mikor lesz kész. Nincs több telefonálás.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="text-3xl mb-3">📁</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Saját esetarchívum</h3>
+        <p class="text-sm leading-relaxed" style="color:#4A5568;">Minden korábbi megrendelés egy helyen. Bármikor visszakereshető, szűrhető.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="text-3xl mb-3">🔔</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Értesítések</h3>
+        <p class="text-sm leading-relaxed" style="color:#4A5568;">Emailben jelezzük ha változás van — elfogadás, készre jelentés, megjegyzés.</p>
+      </div>
+
+      <div class="feature-card" style="border-color:#bbf7d0; background:linear-gradient(135deg,#f0fdf4,#ecfeff);">
+        <div class="text-3xl mb-3">💶</div>
+        <h3 class="font-bold text-lg mb-2" style="color:#15803d;">Ingyenes — örökre</h3>
+        <p class="text-sm leading-relaxed" style="color:#166534;">Fogorvosoknak ez a modul örökre ingyenes. Nincs rejtett díj, nincs próbaidő.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     WHAT THE LAB SEES
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-24" style="background:#fff;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+
+      <!-- Left: image -->
+      <div class="order-2 md:order-1">
+        <div class="rounded-2xl overflow-hidden shadow-xl border border-gray-100">
+          <img src="img/screenshot-lab-receives.jpg" alt="Labor nézet — megrendelés fogadás" class="w-full h-auto">
+        </div>
+        <p class="text-center text-xs mt-3" style="color:#94a3b8;">Labor nézet — megrendelés fogadás</p>
+      </div>
+
+      <!-- Right: copy -->
+      <div class="order-1 md:order-2">
+        <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-5" style="background:#DBEAFE;color:#0078A8;">A labor szemszögéből</span>
+        <h2 class="section-title text-3xl md:text-4xl mb-5">Mit lát a labor?</h2>
+        <p class="text-lg leading-relaxed mb-6" style="color:#4A5568;">
+          Ha a laborod már SmileStone-t használ, a megrendeléseid azonnal bekerülnek a rendszerükbe. Ha még nem — meghívhatod őket egy gombnyomással.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#22c55e" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span style="color:#4A5568;">A labor azonnal értesítést kap az új megrendelésről</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#22c55e" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span style="color:#4A5568;">Elfogadhatja, megjegyzést fűzhet hozzá, státuszt frissíthet</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#22c55e" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span style="color:#4A5568;">Te is látod a visszajelzést — valós időben</span>
+          </li>
+        </ul>
+        <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold" style="color:#0078A8;">
+          Ha a laborod még nem SmileStone-t használ, ajánld nekik →
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SOCIAL PROOF
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-24" style="background:#f8fafc;">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#dcfce7;color:#15803d;">Vélemények</span>
+      <h2 class="section-title text-3xl md:text-4xl">Amit a fogorvosok mondanak</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- Card 1 -->
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-gray-100">
+        <div class="flex gap-1 mb-4">
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <blockquote class="text-base leading-relaxed mb-5" style="color:#1A2B4A;">
+          "Végre nem kell papíron küldeni a megrendelést. A labor rögtön látja, mi is rögtön látjuk az állapotot."
+        </blockquote>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background:linear-gradient(135deg,#16a34a,#22c55e);">FN</div>
+          <div>
+            <p class="font-semibold text-sm" style="color:#1A2B4A;">[Fogorvos neve]</p>
+            <p class="text-xs" style="color:#94a3b8;">Fogorvos, Budapest</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-gray-100">
+        <div class="flex gap-1 mb-4">
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <blockquote class="text-base leading-relaxed mb-5" style="color:#1A2B4A;">
+          "Meglepően egyszerű. 2 perc és kész a megrendelés. Nem gondoltam volna, hogy ilyen gyorsan be tudom illeszteni a munkámba."
+        </blockquote>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background:linear-gradient(135deg,#0078A8,#00BAEF);">FN</div>
+          <div>
+            <p class="font-semibold text-sm" style="color:#1A2B4A;">[Fogorvos neve]</p>
+            <p class="text-xs" style="color:#94a3b8;">Fogorvos, Debrecen</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FAQ
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-24" style="background:#fff;">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#dcfce7;color:#15803d;">GYIK</span>
+      <h2 class="section-title text-3xl md:text-4xl">Gyakori kérdések</h2>
+    </div>
+
+    <div class="divide-y" style="border-color:#e2e8f0;">
+
+      <div class="dentist-faq-item">
+        <button class="dentist-faq-btn" aria-expanded="false">
+          <span>Tényleg ingyenes?</span>
+          <svg class="dentist-faq-chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dentist-faq-body">Igen, fogorvosoknak a munkalap küldés és az esetarchívum örökre ingyenes. Nincs próbaidő, nincs rejtett díj.</div>
+      </div>
+
+      <div class="dentist-faq-item">
+        <button class="dentist-faq-btn" aria-expanded="false">
+          <span>A laboromnak is kell SmileStone?</span>
+          <svg class="dentist-faq-chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dentist-faq-body">Nem kötelező, de ha ők is használják, minden sokkal zökkenőmentesebb — valós idejű státuszok, közvetlen visszajelzés. Meghívhatod őket egy gombnyomással az alkalmazásból.</div>
+      </div>
+
+      <div class="dentist-faq-item">
+        <button class="dentist-faq-btn" aria-expanded="false">
+          <span>Szükség van-e szoftver telepítésre?</span>
+          <svg class="dentist-faq-chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dentist-faq-body">Nem. Böngészőből működik, mobilon is. Nincs telepítés, nincs IT szakember — csak egy böngésző és egy email cím kell.</div>
+      </div>
+
+      <div class="dentist-faq-item">
+        <button class="dentist-faq-btn" aria-expanded="false">
+          <span>Mi van az adataimmal?</span>
+          <svg class="dentist-faq-chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dentist-faq-body">Magyarországon tárolt, titkosított szerveren. GDPR-megfelelő. Az adataid kizárólag a te laboroddal kerülnek megosztásra.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FINAL CTA
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="dentist-trial" class="py-20 md:py-24" style="background:#EAF7FD;">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <div class="free-badge justify-center mb-6 inline-flex">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      Fogorvosoknak teljesen ingyenes
+    </div>
+    <h2 class="section-title text-3xl md:text-4xl mb-4 leading-tight">
+      Próbáld ki — az első megrendelést<br>2 perc alatt elküldheted
+    </h2>
+    <p class="text-lg mb-8" style="color:#4A5568;">
+      Ingyenes regisztráció. Nincs kártyaszám. Nincs kötelezettség.
+    </p>
+    <a href="#dentist-trial" class="btn-green text-base px-10 py-4">Regisztrálok ingyen →</a>
+    <p class="text-xs mt-5" style="color:#94a3b8;">Már 100+ aktív labor használja a SmileStone-t · Magyar fejlesztés · MDR-megfelelő</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════════════ -->
+<footer class="py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-3 gap-10 mb-10">
+
+      <!-- Brand -->
+      <div>
+        <a href="index.html" class="flex items-center gap-2 mb-3">
+          <img src="img/logo-text.webp" alt="SmileStone" class="h-8 w-auto" style="filter: brightness(0) invert(1); opacity:0.85;">
+        </a>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">A fogtechnikai labor szoftver,<br>ami időt ad vissza.</p>
+        <div class="flex items-center gap-3 mt-4">
+          <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31.2 31.2 0 000 12a31.2 31.2 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31.2 31.2 0 0024 12a31.2 31.2 0 00-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.5h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Navigáció</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="features.html">Funkciók</a></li>
+          <li><a href="index.html#pricing-teaser">Árazás</a></li>
+          <li><a href="about.html">Rólunk</a></li>
+          <li><a href="contact.html">Kapcsolat</a></li>
+          <li><a href="dentist.html" style="color:#22c55e;font-weight:600;">Fogorvosoknak — Ingyenes</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal + CTA -->
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Kezdj el ingyen</h4>
+        <p class="text-sm mb-4" style="color:#64748b;">Fogorvosoknak örökre ingyenes.</p>
+        <a href="#dentist-trial" class="btn-green text-sm">Regisztrálok ingyen</a>
+      </div>
+
+    </div>
+
+    <div class="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style="border-color:rgba(255,255,255,0.08); color:#64748b;">
+      <p>© 2026 SmileStone. Minden jog fenntartva.</p>
+      <div class="flex gap-4">
+        <a href="#">Adatvédelem</a>
+        <a href="#">ÁSZF</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// Dentist page FAQ accordion
+document.querySelectorAll('.dentist-faq-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+    // Close all
+    document.querySelectorAll('.dentist-faq-btn').forEach(b => {
+      b.setAttribute('aria-expanded', 'false');
+      b.nextElementSibling.classList.remove('open');
+    });
+    // Open clicked if it was closed
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.nextElementSibling.classList.add('open');
+    }
+  });
+});
+</script>
+</body>
+</html>

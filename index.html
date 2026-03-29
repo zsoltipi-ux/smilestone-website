@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileStone — A fogtechnikai labor szoftver</title>
+  <meta name="description" content="SmileStone ERP: a fogászati labor szoftver, amit a laborvezetők terveztek. Megrendelés kezelés, MDR megfelelőség, fogorvos kommunikáció — egy rendszerben.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════════════════════════ -->
+<header class="nav-sticky">
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="img/logo-text.webp" alt="SmileStone" class="h-9 w-auto">
+    </a>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex items-center gap-7">
+      <a href="features.html" class="nav-link">Funkciók</a>
+      <a href="#pricing-teaser" class="nav-link">Árazás</a>
+      <a href="about.html" class="nav-link">Rólunk</a>
+      <a href="contact.html" class="nav-link">Kapcsolat</a>
+      <a href="dentist.html" class="nav-link font-bold flex items-center gap-1.5" style="color:#15803d;">Fogorvosoknak <span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;background:#dcfce7;color:#15803d;border-radius:9999px;padding:1px 6px;border:1px solid #bbf7d0;">Ingyenes</span></a>
+    </div>
+
+    <!-- Desktop CTA buttons -->
+    <div class="hidden md:flex items-center gap-3">
+      <a href="#trial" class="btn-ghost text-sm">Bejelentkezés</a>
+      <a href="#trial" class="btn-primary text-sm">Próbáld ki ingyen</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:text-blue-500 focus:outline-none" aria-label="Menü megnyitása" aria-expanded="false">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="mobile-menu md:hidden px-4 pb-4 border-t border-gray-100">
+    <a href="features.html" class="nav-link block py-2">Funkciók</a>
+    <a href="#pricing-teaser" class="nav-link block py-2">Árazás</a>
+    <a href="about.html" class="nav-link block py-2">Rólunk</a>
+    <a href="contact.html" class="nav-link block py-2">Kapcsolat</a>
+    <a href="dentist.html" class="block py-2 font-bold" style="color:#15803d;">Fogorvosoknak <span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;background:#dcfce7;color:#15803d;border-radius:9999px;padding:1px 6px;border:1px solid #bbf7d0;">Ingyenes</span></a>
+    <div class="flex flex-col gap-2 mt-3">
+      <a href="#trial" class="btn-ghost text-center text-sm">Bejelentkezés</a>
+      <a href="#trial" class="btn-primary text-center text-sm">Próbáld ki ingyen</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="hero-gradient pt-16 pb-20 md:pt-24 md:pb-28">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Left: copy -->
+      <div class="animate-fade-up">
+        <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 text-sm font-medium mb-6 shadow-sm" style="color:#0078A8;">
+          <span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+          Magyar fejlesztés · MDR-megfelelő
+        </div>
+        <h1 class="section-title text-4xl md:text-5xl leading-tight mb-5">
+          Kevesebb fejfájás. Több idő arra, ami számít. Több mosoly.
+        </h1>
+        <p class="text-lg mb-8 leading-relaxed" style="color:#4A5568; max-width:480px;">
+          Kezeld az összes megrendelést, kommunikálj a fogorvosokkal és felelj meg az MDR előírásoknak — egy rendszerben.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+          <a href="#trial" class="btn-primary text-base px-7 py-3">
+            Próbáld ki ingyen — 30 nap, kártyaszám nélkül
+          </a>
+          <a href="features.html" class="font-semibold flex items-center gap-1.5" style="color:#0078A8;">
+            Nézd meg hogyan működik
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: dashboard screenshot -->
+      <div class="animate-fade-up" style="animation-delay:0.15s;">
+        <img src="img/screenshot-dashboard.jpg" alt="SmileStone dashboard — megrendelés lista" class="w-full rounded-2xl shadow-2xl" style="border:1px solid #e2e8f0;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     TRUST BAR
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="trust-bar py-4">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <p class="text-center text-sm font-medium tracking-wide" style="color:#64748b;">
+      Magyar fejlesztés
+      <span class="mx-3 text-blue-200">·</span>
+      MDR-megfelelő
+      <span class="mx-3 text-blue-200">·</span>
+      Biztonságos, titkosított adattárolás
+      <span class="mx-3 text-blue-200">·</span>
+      Bármikor lemondható
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FEATURES GRID
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-28" style="background:#fff;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Minden, ami egy labornak kell — egy helyen</h2>
+      <p class="text-lg max-w-xl mx-auto" style="color:#4A5568;">Nem általános szoftver. Fogtechnikai laborra tervezett, valós visszajelzések alapján.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="feature-card">
+        <span class="feature-icon">📋</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Megrendelés kezelés</h3>
+        <p style="color:#4A5568; line-height:1.65;">Vedd fel, kövesd és add le az eseteket. Soha többé elveszett papír vagy kihagyott határidő.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">💬</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Fogorvos kommunikáció</h3>
+        <p style="color:#4A5568; line-height:1.65;">Közvetlen kapcsolat a fogászatokkal. Kevesebb félreértés, gyorsabb visszajelzés.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">⚖️</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">MDR megfelelőség</h3>
+        <p style="color:#4A5568; line-height:1.65;">Beépített MDR dokumentáció. Auditálható, nyomtatható, jogszabálynak megfelelő.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📅</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Naptár és határidők</h3>
+        <p style="color:#4A5568; line-height:1.65;">Látd egy nézeten mikor mi esedékes. Ne maradj le egyetlen próbáról sem.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🚗</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Kézbesítés követés</h3>
+        <p style="color:#4A5568; line-height:1.65;">Tudd pontosan mi van úton és mi vár szállításra.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📊</span>
+        <h3 class="font-bold text-lg mb-2" style="color:#1A2B4A;">Statisztikák</h3>
+        <p style="color:#4A5568; line-height:1.65;">Havi bevétel, teljesítmény, forgalom — egy pillantásra.</p>
+      </div>
+
+    </div>
+    <div class="text-center mt-10">
+      <a href="features.html" class="btn-ghost">Összes funkció megtekintése →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     WHY US
+═══════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-28" style="background:#EAF7FD;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#fff;color:#0078A8;">Miért SmileStone?</span>
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Nem minden szoftver érti a fogművességet</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color:#4A5568;">A SmileStone-t fogtechnikai laborok valós igényei alapán építettük — nem általános projektmenedzsment eszközből alakítottuk át.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Differentiator 1 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm" style="border:1px solid #e2e8f0;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#EAF7FD;">🦷</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Fogtechnikai logika, nem általános szoftver</h3>
+        <p style="color:#4A5568; line-height:1.7;">PSB-azonosító, fogsor diagram, MDR dokumentáció — mind be van építve. Nem kell semmit átalakítani, hogy működjön a laborodban.</p>
+      </div>
+
+      <!-- Differentiator 2 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm" style="border:1px solid #e2e8f0;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#EAF7FD;">💬</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Labor és fogorvos egy rendszerben</h3>
+        <p style="color:#4A5568; line-height:1.7;">A fogorvos közvetlenül látja a megrendelései állapotát. Nincs több email ping-pong, nincs több telefonos egyeztetés — mindenki ugyanazt látja, valós időben.</p>
+      </div>
+
+      <!-- Differentiator 3 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm" style="border:1px solid #e2e8f0;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#EAF7FD;">🇭🇺</div>
+        <h3 class="font-bold text-xl mb-3" style="color:#1A2B4A;">Magyar fejlesztés, magyar támogatás</h3>
+        <p style="color:#4A5568; line-height:1.7;">Nem külföldi sablon, nem gépi fordítás. Magyar jogszabályokra építve, magyar csapat által támogatva — érted a nyelvet, értjük a piacot.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════════════════════════════════════════ -->
+<section class="py-20 md:py-28" style="background:#fff;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Mit mondanak a laborvezetők</h2>
+      <p class="text-lg" style="color:#4A5568;">Valódi visszajelzések, valódi laborvezetőktől.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+      <!-- Card 1 -->
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="mt-8 mb-6 text-base leading-relaxed" style="color:#4A5568;">
+          Sokkal fókuszáltabban és gyorsabban dolgozom mint azelőtt. Látok mindent, tervezni tudok minden napra — és ami a legfontosabb: nem kell haza vinnem a munkát.
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="avatar-placeholder w-10 h-10 text-base" style="width:40px;height:40px;font-size:1rem;">HZ</div>
+          <div>
+            <p class="font-bold text-sm" style="color:#1A2B4A;">Hanser Zsolt</p>
+            <p class="text-xs" style="color:#94a3b8;">Laborvezető</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="mt-8 mb-6 text-base leading-relaxed" style="color:#4A5568;">
+          Az egyetlen legjobb elérhető szoftver fogtechnikusoknak a piacon.
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="avatar-placeholder w-10 h-10 text-base" style="width:40px;height:40px;font-size:1rem;">KN</div>
+          <div>
+            <p class="font-bold text-sm" style="color:#1A2B4A;">Kaposvári Norbert</p>
+            <p class="text-xs" style="color:#94a3b8;">Laborvezető</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PRICING SLIDER
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="pricing-teaser" class="py-20 md:py-28" style="background:#F0FAFE;">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <span class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style="background:#DBEAFE;color:#0078A8;">Árazás</span>
+      <h2 class="section-title text-3xl md:text-4xl mb-4">Átlátható árazás, rejtett díjak nélkül</h2>
+      <p class="text-lg max-w-xl mx-auto" style="color:#4A5568;">Csak azért fizetsz, amennyit használsz. Havi előfizetés, bármikor lemondható.</p>
+    </div>
+
+    <!-- Pricing card -->
+    <div class="rounded-3xl overflow-hidden shadow-2xl" style="background:#fff;">
+
+      <!-- Card top bar -->
+      <div class="px-8 py-5 flex items-center justify-between" style="background:linear-gradient(135deg,#0078A8 0%,#00BAEF 100%);">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span class="text-white font-bold text-base">Hány eseted van egy hónapban?</span>
+        </div>
+        <span class="text-white text-sm opacity-80 hidden sm:block">Húzd a csúszkát →</span>
+      </div>
+
+      <!-- Slider area -->
+      <div class="px-8 pt-8 pb-6">
+
+        <!-- Case count display -->
+        <div class="text-center mb-6">
+          <span id="case-bubble" class="inline-flex items-center justify-center text-4xl font-extrabold tabular-nums transition-all duration-150" style="color:#00BAEF;">1</span>
+          <span class="text-xl font-semibold ml-1" style="color:#94a3b8;">eset / hó</span>
+        </div>
+
+        <!-- Slider -->
+        <div class="relative px-2 mb-2">
+          <input
+            id="case-slider"
+            type="range"
+            min="1" max="300" value="1"
+            class="pricing-slider w-full"
+            aria-label="Esetek száma havonta"
+          >
+          <!-- Tick marks -->
+          <div class="flex justify-between mt-3 px-1">
+            <span class="text-xs font-medium" style="color:#94a3b8;">1</span>
+            <span class="text-xs font-medium" style="color:#94a3b8;">75</span>
+            <span class="text-xs font-medium" style="color:#94a3b8;">150</span>
+            <span class="text-xs font-medium" style="color:#94a3b8;">225</span>
+            <span class="text-xs font-medium" style="color:#94a3b8;">300+</span>
+          </div>
+        </div>
+
+        <!-- Quick-pick buttons -->
+        <div class="flex flex-wrap justify-center gap-2 mt-5 mb-8">
+          <button class="quick-pick" data-val="20">Kis labor<br><span class="text-xs opacity-70">~20 eset</span></button>
+          <button class="quick-pick" data-val="75">Közepes<br><span class="text-xs opacity-70">~75 eset</span></button>
+          <button class="quick-pick" data-val="150">Nagy labor<br><span class="text-xs opacity-70">~150 eset</span></button>
+          <button class="quick-pick" data-val="300">Nagyvállalat<br><span class="text-xs opacity-70">300+ eset</span></button>
+        </div>
+
+        <!-- Price breakdown -->
+        <div id="price-breakdown" class="rounded-2xl p-6 mb-6" style="background:#F0FAFE;">
+          <div id="tier-rows" class="space-y-2 mb-5 text-sm"></div>
+          <div class="border-t pt-4 flex items-end justify-between" style="border-color:#DBEAFE;">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#94a3b8;">Havi összesen</p>
+              <div class="flex items-baseline gap-2">
+                <span id="total-price" class="text-4xl font-extrabold tabular-nums transition-all duration-150" style="color:#1A2B4A;">€70</span>
+                <span class="text-sm" style="color:#94a3b8;">+ ÁFA</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#94a3b8;">Esetenként</p>
+              <span id="per-case-price" class="text-xl font-bold" style="color:#00BAEF;">€70.00</span>
+              <span class="text-xs ml-1" style="color:#94a3b8;">/ eset</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savings badge -->
+        <div id="savings-badge" class="hidden text-center mb-6">
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full" style="background:#DCFCE7;color:#15803d;">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span id="savings-text"></span>
+          </span>
+        </div>
+
+        <!-- CTA -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#trial" class="btn-primary text-base text-center flex-1 py-3.5">Próbáld ki ingyen — 30 nap</a>
+          <a href="contact.html" class="btn-ghost text-base text-center px-6 py-3.5">Kérdésem van</a>
+        </div>
+
+        <!-- Trust line -->
+        <p class="text-center text-xs mt-4" style="color:#94a3b8;">Kártyaszám nem szükséges · Bármikor lemondható · Adataid biztonságban vannak</p>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* ── Pricing slider custom styles ── */
+.pricing-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right, #00BAEF 0%, #00BAEF var(--slider-pct, 0%), #e2e8f0 var(--slider-pct, 0%), #e2e8f0 100%);
+  transition: background 0.05s;
+}
+.pricing-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #00BAEF;
+  box-shadow: 0 2px 8px rgba(0,186,239,0.35);
+  cursor: grab;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.pricing-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  box-shadow: 0 0 0 6px rgba(0,186,239,0.18);
+  transform: scale(1.12);
+}
+.pricing-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #00BAEF;
+  box-shadow: 0 2px 8px rgba(0,186,239,0.35);
+  cursor: grab;
+}
+.quick-pick {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1A2B4A;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.4;
+}
+.quick-pick:hover, .quick-pick.active {
+  border-color: #00BAEF;
+  background: #EAF7FD;
+  color: #0078A8;
+}
+.tier-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.tier-row.active-tier {
+  background: rgba(0,186,239,0.08);
+}
+</style>
+
+<script>
+(function() {
+  const slider   = document.getElementById('case-slider');
+  const bubble   = document.getElementById('case-bubble');
+  const tierRows = document.getElementById('tier-rows');
+  const totalEl  = document.getElementById('total-price');
+  const perCaseEl = document.getElementById('per-case-price');
+  const savingsBadge = document.getElementById('savings-badge');
+  const savingsText  = document.getElementById('savings-text');
+
+  // Pricing tiers: {upTo, unitPrice, label}
+  const TIERS = [
+    { upTo: 75,  unitPrice: 0,    base: 70,  label: 'Alap csomag (1–75 eset)' },
+    { upTo: 200, unitPrice: 1.00, base: 0,   label: '+76–200 eset' },
+    { upTo: 300, unitPrice: 0.66, base: 0,   label: '+201–300 eset' },
+  ];
+
+  function calcPrice(n) {
+    let total = 70; // base
+    let rows  = [];
+    rows.push({ label: 'Alap csomag (1–75 eset)', cases: Math.min(n, 75), price: 70, tier: 0 });
+    if (n > 75) {
+      const extra1 = Math.min(n - 75, 125);
+      const cost1  = extra1 * 1.00;
+      total += cost1;
+      rows.push({ label: '+76–200 eset', cases: extra1, price: cost1, tier: 1 });
+    }
+    if (n > 200) {
+      const extra2 = n - 200;
+      const cost2  = extra2 * 0.66;
+      total += cost2;
+      rows.push({ label: '+201–300 eset', cases: extra2, price: cost2, tier: 2 });
+    }
+    return { total, rows };
+  }
+
+  function fmt(v) {
+    return '€' + (Number.isInteger(v) ? v : v.toFixed(2));
+  }
+
+  function updateSliderBg(val) {
+    const pct = ((val - 1) / (300 - 1)) * 100;
+    slider.style.setProperty('--slider-pct', pct + '%');
+  }
+
+  function render(val) {
+    val = Math.max(1, Math.min(300, val));
+    bubble.textContent = val === 300 ? '300+' : val;
+    updateSliderBg(val);
+
+    const { total, rows } = calcPrice(val);
+    const perCase = total / val;
+
+    // Tier rows
+    tierRows.innerHTML = rows.map((r, i) => `
+      <div class="tier-row ${i === rows.length - 1 ? 'active-tier' : ''}">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full" style="background:${i===0?'#00BAEF':i===1?'#0078A8':'#1A2B4A'};"></span>
+          <span style="color:#4A5568;">${r.label}</span>
+        </div>
+        <span class="font-semibold tabular-nums" style="color:#1A2B4A;">${fmt(r.price)}</span>
+      </div>
+    `).join('');
+
+    // Animate total
+    totalEl.textContent = fmt(Math.round(total * 100) / 100);
+    perCaseEl.textContent = '€' + perCase.toFixed(2);
+
+    // Savings badge (only when > 75 cases, showing discount vs flat rate)
+    if (val > 75) {
+      const flatRate = val * (70 / 75); // hypothetical flat
+      const saved = flatRate - total;
+      if (saved > 0) {
+        savingsText.textContent = fmt(Math.round(saved)) + ' megtakarítás a sávos árazással';
+        savingsBadge.classList.remove('hidden');
+      } else {
+        savingsBadge.classList.add('hidden');
+      }
+    } else {
+      savingsBadge.classList.add('hidden');
+    }
+
+    // Quick pick active state
+    document.querySelectorAll('.quick-pick').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+    });
+  }
+
+  slider.addEventListener('input', () => render(parseInt(slider.value)));
+
+  document.querySelectorAll('.quick-pick').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = parseInt(btn.dataset.val);
+      slider.value = v;
+      render(v);
+    });
+  });
+
+  // Init
+  render(1);
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FINAL CTA BANNER
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="trial" class="cta-banner py-20 md:py-24">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 leading-tight">
+      Készen állsz hogy visszanyerd az idődet?
+    </h2>
+    <p class="text-lg text-white mb-8 opacity-90">
+      30 napos ingyenes próba. Kártyaszám nem kell. Bármikor lemondható.
+    </p>
+    <a href="#trial" class="btn-white text-base px-8 py-3.5">Próbáld ki ingyen →</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════════════ -->
+<footer class="py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-3 gap-10 mb-10">
+
+      <!-- Brand -->
+      <div>
+        <a href="index.html" class="flex items-center gap-2 mb-3">
+          <img src="img/logo-text.webp" alt="SmileStone" class="h-8 w-auto" style="filter: brightness(0) invert(1); opacity:0.85;">
+        </a>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">A fogtechnikai labor szoftver,<br>ami időt ad vissza.</p>
+        <!-- Social icons -->
+        <div class="flex items-center gap-3 mt-4">
+          <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31.2 31.2 0 000 12a31.2 31.2 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31.2 31.2 0 0024 12a31.2 31.2 0 00-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.5h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Navigáció</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="features.html">Funkciók</a></li>
+          <li><a href="#pricing-teaser">Árazás</a></li>
+          <li><a href="about.html">Rólunk</a></li>
+          <li><a href="contact.html">Kapcsolat</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal + CTA -->
+      <div>
+        <h4 class="font-semibold text-sm uppercase tracking-wider mb-4" style="color:#94a3b8;">Kezdj el ingyen</h4>
+        <p class="text-sm mb-4" style="color:#64748b;">30 napos próba, kártyaszám nélkül.</p>
+        <a href="#trial" class="btn-primary text-sm">Próbáld ki ingyen</a>
+      </div>
+
+    </div>
+
+    <div class="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style="border-color:rgba(255,255,255,0.08); color:#64748b;">
+      <p>© 2026 SmileStone. Minden jog fenntartva.</p>
+      <div class="flex gap-4">
+        <a href="#">Adatvédelem</a>
+        <a href="#">ÁSZF</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
